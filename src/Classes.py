@@ -52,7 +52,7 @@ class Category:
     def add_product(self, product):
         self.__products.append(product)
         Category.product_count += 1
-        return self
+
 
     @property
     def products(self):
