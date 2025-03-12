@@ -30,6 +30,12 @@ class Product:
         else:
             self.__price = value
 
+    def __str__(self):
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        return self.price * self.quantity + other.price * other.quantity
+
 
 class Category:
     name: str
@@ -53,12 +59,11 @@ class Category:
         self.__products.append(product)
         Category.product_count += 1
 
-
     @property
     def products(self):
         result = []
         for i in self.__products:
-            result.append(f"{i.name}, {i.price} руб. Остаток: {i.quantity} шт.")
+            result.append(str(i))
         return "\n".join(result)
 
     @products.setter
@@ -67,3 +72,9 @@ class Category:
         self.name = name
         self.price = price
         self.quantity = quantity
+
+    def __str__(self):
+        quantity_summ = 0
+        for i in self.__products:
+            quantity_summ += i.quantity
+        return f"{self.name}, количество продуктов: {quantity_summ} шт."
