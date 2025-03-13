@@ -1,6 +1,6 @@
 import pytest
 
-from src.Classes import Category, Product
+from src.Classes import Category, Product, Smartphone, LawnGrass
 
 
 @pytest.fixture
@@ -26,6 +26,18 @@ def category_fruits():
             Product("Груша", "Нельзя скушать", 4, 20),
         ],
     )
+
+
+@pytest.fixture()
+def product_smartphone():
+    return Smartphone(
+        "Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5, "S23 Ultra", 256, "Серый"
+    )
+
+
+@pytest.fixture()
+def product_lawn():
+    return LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", "7 дней", "Зеленый")
 
 
 def test_Product(product_apple):
@@ -89,3 +101,29 @@ def test_add(product_apple, product_carrot):
 def test_str(category_fruits, product_carrot):
     assert str(category_fruits) == "Фрукты, количество продуктов: 45 шт."
     assert str(product_carrot) == "Морковь, 20 руб. Остаток: 10 шт."
+
+
+def test_smartphone(product_smartphone):
+    assert product_smartphone.name == "Samsung Galaxy S23 Ultra"
+    assert product_smartphone.description == "256GB, Серый цвет, 200MP камера"
+    assert product_smartphone.price == 180000.0
+    assert product_smartphone.quantity == 5
+    assert product_smartphone.efficiency == 95.5
+    assert product_smartphone.model == "S23 Ultra"
+    assert product_smartphone.memory == 256
+    assert product_smartphone.color == "Серый"
+
+
+def test_lawn(product_lawn):
+    assert product_lawn.name == "Газонная трава"
+    assert product_lawn.description == "Элитная трава для газона"
+    assert product_lawn.price == 500.0
+    assert product_lawn.quantity == 20
+    assert product_lawn.country == "Россия"
+    assert product_lawn.germination_period == "7 дней"
+    assert product_lawn.color == "Зеленый"
+
+
+def test_add_error(product_lawn, product_smartphone):
+    with pytest.raises(TypeError):
+        print(product_smartphone + product_lawn)

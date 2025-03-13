@@ -1,10 +1,13 @@
 class Product:
+    """Класс для создания продуктов"""
+
     name: str
     description: str
     __price: float
     quantity: int
 
     def __init__(self, name, description, price, quantity):
+        """Функция инизиализации продукта и его атрибутов"""
         self.name = name
         self.description = description
         self.__price = price
@@ -12,6 +15,7 @@ class Product:
 
     @classmethod
     def new_product(cls, new_product):
+        """Функция добавления нового продукта в класс"""
         return cls(
             name=new_product["name"],
             description=new_product["description"],
@@ -21,23 +25,32 @@ class Product:
 
     @property
     def price(self):
+        """Функция для задачи цены"""
         return self.__price
 
     @price.setter
     def price(self, value):
+        """Функция-сеттер для проверки положительна ли цена и установки её"""
         if value <= 0:
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self.__price = value
 
     def __str__(self):
+        """Функция возврата строки с атрибутами продукта"""
         return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        return self.price * self.quantity + other.price * other.quantity
+        """Функция сложения продуктов одного класса"""
+        if type(self) is type(other):
+            return self.price * self.quantity + other.price * other.quantity
+        else:
+            raise TypeError
 
 
 class Category:
+    """Класс для создания категорий продуктов"""
+
     name: str
     description: str
     __products: list
@@ -45,6 +58,7 @@ class Category:
     category_count = 0
 
     def __init__(self, name, description, products=None):
+        """Функция инизиализации категории и её атрибутов"""
         self.name = name
         self.description = description
         self.__products = products
@@ -56,11 +70,16 @@ class Category:
     # return f"{i["name"]}, {i["description"]}, {i["price"]}, {i["quantity"]}"
 
     def add_product(self, product):
-        self.__products.append(product)
-        Category.product_count += 1
+        """Функция добавления продукта в категорию"""
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError
 
     @property
     def products(self):
+        """Атрибут списка продуктов, выводящий список всех продуктов в объекте класса"""
         result = []
         for i in self.__products:
             result.append(str(i))
@@ -68,13 +87,47 @@ class Category:
 
     @products.setter
     def products(self, products):
+        """Функция-сеттер для добавления продуктов"""
         name, price, quantity = products[0], products[2], products[3]
         self.name = name
         self.price = price
         self.quantity = quantity
 
     def __str__(self):
+        """Функция для возвращения общего количества продуктов в объекте класса"""
         quantity_summ = 0
         for i in self.__products:
             quantity_summ += i.quantity
         return f"{self.name}, количество продуктов: {quantity_summ} шт."
+
+
+class Smartphone(Product):
+    """Дочерняя функция для создания продуктов-смартфонов"""
+
+    efficiency = float
+    model = str
+    memory = int
+    color = str
+
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
+        """Функция инизиализации смартфона и его атрибутов"""
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """Дочерняя функция для создания продуктов-газонов"""
+
+    country = str
+    germination_period = str
+    color = str
+
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        """Функция инизиализации газона и его атрибутов"""
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color
