@@ -1,6 +1,6 @@
 import pytest
 
-from src.Classes import Category, Product, Smartphone, LawnGrass
+from src.Classes import Category, Product, Smartphone, LawnGrass, BaseProduct, MixinProduct
 
 
 @pytest.fixture
@@ -127,3 +127,8 @@ def test_lawn(product_lawn):
 def test_add_error(product_lawn, product_smartphone):
     with pytest.raises(TypeError):
         print(product_smartphone + product_lawn)
+
+def test_mixin(capsys):
+    Product("товар", "описание", 110, 20)
+    message = capsys.readouterr()
+    assert message.out.strip() == "Product('товар',описание, 110, 20)"
