@@ -1,6 +1,6 @@
 import pytest
 
-from src.Classes import Category, Product, Smartphone, LawnGrass, BaseProduct, MixinProduct
+from src.Classes import Category, LawnGrass, Product, Smartphone
 
 
 @pytest.fixture
@@ -128,7 +128,22 @@ def test_add_error(product_lawn, product_smartphone):
     with pytest.raises(TypeError):
         print(product_smartphone + product_lawn)
 
+
 def test_mixin(capsys):
     Product("товар", "описание", 110, 20)
     message = capsys.readouterr()
     assert message.out.strip() == "Product('товар',описание, 110, 20)"
+
+
+def test_value_error():
+    with pytest.raises(ValueError):
+        Product("товар", "описание", 110, 0)
+
+
+def test_zero_division_error():
+    empty_category = Category("Пустая категория", "Категория без продуктов", [])
+    assert empty_category.middle_price() == 0
+
+
+def test_avg_price(category_fruits):
+    assert category_fruits.middle_price() == 5
